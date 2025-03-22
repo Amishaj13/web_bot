@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Docs AI Assistant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Google Docs AI Assistant</h2>
+    
+   
+
+    <div id="processing-section">
+      <div class="loading-indicator">
+        <div class="spinner"></div>
+      </div>
+      <div id="status-message">Processing document...</div>
+    </div>
+    
+    <!-- Chat View (hidden by default) -->
+    <div id="chat-section">
+      <div id="document-info">
+        <h3>Document Processed</h3>
+        <p id="document-title">My Project Proposal</p>
+      </div>
+      
+      <div id="chat-history">
+        <!-- Chat messages will be added here dynamically -->
+      </div>
+      
+      <div id="chat-input">
+        <input type="text" id="question" placeholder="Ask a question about the document..." />
+        <button id="submit-question">Ask</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

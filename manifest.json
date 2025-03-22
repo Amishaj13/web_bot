@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Insomniacs Chatbot",
+  "version": "1.0",
+  "description": "A chatbot assistant for Insomniacs.",
+  "action": {
+    "default_popup": "scripts/popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["scripts/content.js"],
+      "css": ["scripts/style.css"]
+    }
+  ]
+}

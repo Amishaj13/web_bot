@@ -1,0 +1,5 @@
+.env
+app/chroma_db
+app/chroma_db/*
+app/website_data.json
+venv
