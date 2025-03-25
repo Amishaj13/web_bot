@@ -36,12 +36,16 @@ conversation_memory = []
 # Function to scrape website content
 def fetch_website_content(url):
     try:
+        print(f"Fetching content from URL: {url}")
         response = requests.get(url, timeout=10)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
-        return soup.get_text()
+        content = soup.get_text()
+        print(f"Fetched content length: {len(content)}")
+        return content
     except RequestException as e:
-        return f"Error fetching website data: {e}"
+        print(f"Error fetching website content: {e}")
+        return None
 
 # Endpoint to scrape and store website content
 @app.route('/scrape', methods=['POST'])
@@ -58,16 +62,21 @@ def scrape():
         if not content:
             return jsonify({"success": False, "error": "Failed to fetch website content."}), 500
 
-        # Reset the ChromaDB collection by deleting existing data
-        print("Resetting ChromaDB collection...")
-        # vector_store.delete_collection()  # Clear existing data
-        # print("ChromaDB collection reset successfully.")
-
         # Store the new content in ChromaDB
         print("Storing new content in ChromaDB...")
         doc = Document(page_content=content, metadata={"source": url})
         vector_store.add_documents([doc])
         print("Content stored successfully.")
+
+        # Update the retriever
+        global retriever
+        retriever = vector_store.as_retriever(search_kwargs={'k': 5})
+        print("Retriever updated successfully.")
+
+        # Clear conversation memory for the new website
+        global conversation_memory
+        conversation_memory = []
+        print("Conversation memory cleared.")
 
         return jsonify({"success": True})
     except Exception as e:
@@ -88,6 +97,11 @@ def chat():
 
     # Retrieve relevant documents from ChromaDB
     docs = retriever.get_relevant_documents(user_input)
+    print(f"Retrieved {len(docs)} documents from ChromaDB.")
+    for doc in docs:
+        print(f"Document Source: {doc.metadata['source']}")
+        print(f"Document Content: {doc.page_content[:200]}")  # Print the first 200 characters
+
     knowledge = "\n\n".join([doc.page_content for doc in docs])
 
     # Generate a response using the LLM

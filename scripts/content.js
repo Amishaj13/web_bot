@@ -67,7 +67,7 @@ function displayChatbot() {
     (response) => {
       const messagesContainer = chatbot.querySelector('#insomniacs-ai-messages');
       messagesContainer.innerHTML = ''; // Clear the loading message
-
+      console.log(response);
       if (response && response.success) {
         const successMessage = document.createElement('div');
         successMessage.className = 'assistant-message';
@@ -87,33 +87,33 @@ function displayChatbot() {
 
 function setupEventListeners(chatbot) {
   // Theme toggle
-  chatbot.querySelector('#theme-toggle').addEventListener('click', () => {
-    chatbot.classList.toggle('insomniacs-dark-mode');
-    chatbot.classList.toggle('insomniacs-light-mode');
-  });
+  // chatbot.querySelector('#theme-toggle').addEventListener('click', () => {
+  //   chatbot.classList.toggle('insomniacs-dark-mode');
+  //   chatbot.classList.toggle('insomniacs-light-mode');
+  // });
   
   // Minimize toggle
-  chatbot.querySelector('#minimize-toggle').addEventListener('click', () => {
-    chatbot.classList.toggle('minimized');
+  // chatbot.querySelector('#minimize-toggle').addEventListener('click', () => {
+  //   chatbot.classList.toggle('minimized');
     
-    // Change icon when minimized/maximized
-    const minimizeBtn = chatbot.querySelector('#minimize-toggle');
-    if (chatbot.classList.contains('minimized')) {
-      minimizeBtn.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="white"/>
-        </svg>
-      `;
-      minimizeBtn.title = 'Maximize';
-    } else {
-      minimizeBtn.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19 13H5V11H19V13Z" fill="white"/>
-        </svg>
-      `;
-      minimizeBtn.title = 'Minimize';
-    }
-  });
+  //   // Change icon when minimized/maximized
+  //   const minimizeBtn = chatbot.querySelector('#minimize-toggle');
+  //   if (chatbot.classList.contains('minimized')) {
+  //     minimizeBtn.innerHTML = `
+  //       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  //         <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="white"/>
+  //       </svg>
+  //     `;
+  //     minimizeBtn.title = 'Maximize';
+  //   } else {
+  //     minimizeBtn.innerHTML = `
+  //       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  //         <path d="M19 13H5V11H19V13Z" fill="white"/>
+  //       </svg>
+  //     `;
+  //     minimizeBtn.title = 'Minimize';
+  //   }
+  // });
   
   // Close button
   chatbot.querySelector('#close-chatbot').addEventListener('click', () => {

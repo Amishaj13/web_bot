@@ -1,4 +1,6 @@
 // background.js - Handles events and communication
+let tenantCounter = 1;
+let currentTenantId = null; // Global variable to store the current tenant ID
 
 // Listen for messages from content script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -18,16 +20,21 @@ async function askQuestionAndRespond(question, website, sendResponse) {
     return;
   }
 
+  if (!currentTenantId) {
+    sendResponse({ success: false, error: 'tenantId is not defined. Please scrape a website first.' });
+    return;
+  }
+
   try {
     console.log('Asking question:', question);
-    
+
     // Call the backend server to ask a question
     const response = await fetch('http://localhost:5000/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message: question}),
+      body: JSON.stringify({ message: question, tenant_id: currentTenantId }),
     });
 
     if (!response.ok) {
@@ -50,13 +57,18 @@ async function askQuestionAndRespond(question, website, sendResponse) {
 }
 
 async function scrapeWebsiteContent(url, sendResponse) {
+  const tenantId = "tenant_" + tenantCounter;
+  tenantCounter++; // Increment for the next click
+  currentTenantId = tenantId; // Store the tenant ID globally
+  console.log('Scraping website content:', url, tenantId);
+
   try {
     const response = await fetch('http://localhost:5000/scrape', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ url: url }),
+      body: JSON.stringify({ website_url: url, tenant_id: tenantId }),
     });
 
     if (!response.ok) {
@@ -64,7 +76,8 @@ async function scrapeWebsiteContent(url, sendResponse) {
     }
 
     const data = await response.json();
-    if (data.success) {
+   
+    if (data.status === 'success') {
       sendResponse({ success: true });
     } else {
       sendResponse({ success: false, error: data.error });
@@ -74,3 +87,4 @@ async function scrapeWebsiteContent(url, sendResponse) {
     sendResponse({ success: false, error: error.message });
   }
 }
+
