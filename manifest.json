@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Insomniacs Chatbot",
+  "name": "Website bot",
   "version": "1.0",
   "description": "A chatbot assistant for Insomniacs.",
   "action": {

@@ -113,6 +113,7 @@ def chat():
     {knowledge}
 
     Previous Conversation:
+
     {conversation_memory[-5:]}
 
     User Message:
